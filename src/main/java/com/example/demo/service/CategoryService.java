@@ -91,4 +91,11 @@ public class CategoryService {
         return new UpdateCategoryResponse(savedCategory.getCategoryId(),
                 savedCategory.getCategoryName(), savedCategory.getUpdatedAt());
     }
+
+    public void deleteCategory(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("找不到此商品類別"));
+
+        categoryRepository.delete(category);
+    }
 }

@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
             MethodArgumentTypeMismatchException exception) {
         String parameterName = exception.getName();
 
-        String message = parameterName + " 格式錯誤";
+        String message = parameterName + " 型別錯誤";
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), message));
