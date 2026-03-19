@@ -10,6 +10,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -28,6 +29,7 @@ public class Category {
     private Long categoryId;
 
     @Column(name = "category_name", length = 50, nullable = false, unique = true)
+    @Setter
     private String categoryName;
 
     @Column(name = "created_at", nullable = false, updatable = false)

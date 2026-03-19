@@ -7,9 +7,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.request.CreateCategoryRequest;
+import com.example.demo.dto.request.UpdateCategoryRequest;
 import com.example.demo.dto.response.CategoryResponse;
 import com.example.demo.dto.response.CreateCategoryResponse;
 import com.example.demo.dto.response.PageResponse;
+import com.example.demo.dto.response.UpdateCategoryResponse;
 import com.example.demo.entity.Category;
 import com.example.demo.exception.DuplicateResourceException;
 import com.example.demo.exception.ResourceNotFoundException;
@@ -26,7 +28,7 @@ public class CategoryService {
         String categoryName = createCategoryRequest.getCategoryName().trim();
 
         if (categoryRepository.existsByCategoryNameIgnoreCase(categoryName)) {
-            throw new DuplicateResourceException("類別已經存在");
+            throw new DuplicateResourceException("此商品類別名稱已經被使用");
         }
 
         Category category = new Category(categoryName);
@@ -67,5 +69,26 @@ public class CategoryService {
         return new PageResponse<>(content, categoryPage.getNumber(), categoryPage.getSize(),
                 categoryPage.getTotalElements(), categoryPage.getTotalPages(),
                 categoryPage.isFirst(), categoryPage.isLast());
+    }
+
+    public UpdateCategoryResponse updateCategory(Long categoryId,
+            UpdateCategoryRequest updateCategoryRequest) {
+
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("找不到此商品類別"));
+
+        String categoryName = updateCategoryRequest.getCategoryName().trim();
+
+        if (categoryRepository.existsByCategoryNameIgnoreCaseAndCategoryIdNot(categoryName,
+                categoryId)) {
+            throw new DuplicateResourceException("此商品類別名稱已經被使用");
+        }
+
+        category.setCategoryName(categoryName);
+
+        Category savedCategory = categoryRepository.save(category);
+
+        return new UpdateCategoryResponse(savedCategory.getCategoryId(),
+                savedCategory.getCategoryName(), savedCategory.getUpdatedAt());
     }
 }

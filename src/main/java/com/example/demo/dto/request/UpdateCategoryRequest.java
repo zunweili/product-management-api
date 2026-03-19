@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateCategoryRequest {
+public class UpdateCategoryRequest {
 
     @NotBlank(message = "商品類別名稱不能空白")
     @Size(max = 50, message = "商品類別名稱不能超過50字")

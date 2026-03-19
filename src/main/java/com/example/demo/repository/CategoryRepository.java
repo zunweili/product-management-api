@@ -10,5 +10,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     boolean existsByCategoryNameIgnoreCase(String categoryName);
 
+    boolean existsByCategoryNameIgnoreCaseAndCategoryIdNot(String categoryName, Long categoryId);
+
     Page<Category> findByCategoryNameContainingIgnoreCase(String keyword, Pageable pageable);
 }
