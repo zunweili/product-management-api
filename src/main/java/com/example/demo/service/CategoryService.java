@@ -1,9 +1,15 @@
 package com.example.demo.service;
 
+import org.springframework.data.domain.Pageable;
+import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.request.CreateCategoryRequest;
 import com.example.demo.dto.response.CategoryResponse;
 import com.example.demo.dto.response.CreateCategoryResponse;
+import com.example.demo.dto.response.PageResponse;
 import com.example.demo.entity.Category;
 import com.example.demo.exception.DuplicateResourceException;
 import com.example.demo.exception.ResourceNotFoundException;
@@ -37,5 +43,29 @@ public class CategoryService {
 
         return new CategoryResponse(category.getCategoryId(), category.getCategoryName(),
                 category.getCreatedAt(), category.getUpdatedAt());
+    }
+
+    public PageResponse<CategoryResponse> searchCategoriesByName(String keyword, int page,
+            int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+
+        Page<Category> categoryPage;
+
+        if (keyword == null || keyword.isBlank()) {
+            categoryPage = categoryRepository.findAll(pageable);
+        } else {
+            categoryPage = categoryRepository.findByCategoryNameContainingIgnoreCase(keyword.trim(),
+                    pageable);
+        }
+
+        List<CategoryResponse> content = categoryPage.getContent().stream()
+                .map((Category category) -> new CategoryResponse(category.getCategoryId(),
+                        category.getCategoryName(), category.getCreatedAt(),
+                        category.getUpdatedAt()))
+                .toList();
+
+        return new PageResponse<>(content, categoryPage.getNumber(), categoryPage.getSize(),
+                categoryPage.getTotalElements(), categoryPage.getTotalPages(),
+                categoryPage.isFirst(), categoryPage.isLast());
     }
 }

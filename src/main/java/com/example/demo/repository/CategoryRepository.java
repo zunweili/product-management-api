@@ -1,9 +1,14 @@
 package com.example.demo.repository;
 
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.entity.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    Boolean existsByCategoryNameIgnoreCase(String categoryName);
+    boolean existsByCategoryNameIgnoreCase(String categoryName);
+
+    Page<Category> findByCategoryNameContainingIgnoreCase(String keyword, Pageable pageable);
 }
