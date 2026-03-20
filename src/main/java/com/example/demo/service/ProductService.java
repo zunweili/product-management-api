@@ -3,6 +3,7 @@ package com.example.demo.service;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.request.CreateProductRequest;
 import com.example.demo.dto.response.CreateProductResponse;
+import com.example.demo.dto.response.ProductResponse;
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Product;
 import com.example.demo.exception.ResourceNotFoundException;
@@ -43,5 +44,16 @@ public class ProductService {
                 savedProduct.getCategory().getCategoryName(), savedProduct.getPrice(),
                 savedProduct.getImageUrl(), savedProduct.getDescription(), savedProduct.getStatus(),
                 savedProduct.getStock(), savedProduct.getCreatedAt());
+    }
+
+    public ProductResponse getProductById(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("查無此商品"));
+
+        return new ProductResponse(product.getProductId(), product.getProductName(),
+                product.getCategory().getCategoryId(), product.getCategory().getCategoryName(),
+                product.getPrice(), product.getImageUrl(), product.getDescription(),
+                product.getStatus(), product.getStock(), product.getCreatedAt(),
+                product.getUpdatedAt());
     }
 }
