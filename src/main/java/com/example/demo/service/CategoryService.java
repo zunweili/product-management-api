@@ -47,8 +47,7 @@ public class CategoryService {
                 category.getCreatedAt(), category.getUpdatedAt());
     }
 
-    public PageResponse<CategoryResponse> searchCategoriesByName(String keyword, int page,
-            int size) {
+    public PageResponse<CategoryResponse> searchCategories(String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 
         Page<Category> categoryPage;

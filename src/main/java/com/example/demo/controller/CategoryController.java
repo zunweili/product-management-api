@@ -51,7 +51,7 @@ public class CategoryController {
             @RequestParam(defaultValue = "0") @Min(value = 0, message = "起始頁碼必須大於或等於 0") int page,
             @RequestParam(defaultValue = "5") @Min(value = 1, message = "每頁筆數必須大於或等於 1") int size) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(categoryService.searchCategoriesByName(keyword, page, size));
+                .body(categoryService.searchCategories(keyword, page, size));
     }
 
     @PutMapping("/categories/{categoryId}")
