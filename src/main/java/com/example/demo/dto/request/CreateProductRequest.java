@@ -30,7 +30,6 @@ public class CreateProductRequest {
     @Size(max = 1000, message = "商品描述不能超過 1000 字")
     private String description;
 
-    @NotNull(message = "商品狀態不能為空")
     private ProductStatus status;
 
     @NotNull(message = "商品庫存不能為空")

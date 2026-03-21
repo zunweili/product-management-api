@@ -3,9 +3,13 @@ package com.example.demo.service;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.request.CreateProductRequest;
 import com.example.demo.dto.response.CreateProductResponse;
+import com.example.demo.dto.response.PageResponse;
 import com.example.demo.dto.response.ProductResponse;
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Product;
+import com.example.demo.enums.ProductSortBy;
+import com.example.demo.enums.ProductStatus;
+import com.example.demo.enums.SortDirection;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.ProductRepository;
@@ -34,7 +38,9 @@ public class ProductService {
         product.setDescription(
                 description == null || description.trim().isEmpty() ? null : description.trim());
 
-        product.setStatus(createProductRequest.getStatus());
+        ProductStatus productStatus = createProductRequest.getStatus();
+        product.setStatus(productStatus == null ? ProductStatus.ACTIVE : productStatus);
+
         product.setStock(createProductRequest.getStock());
 
         Product savedProduct = productRepository.save(product);
@@ -55,5 +61,12 @@ public class ProductService {
                 product.getPrice(), product.getImageUrl(), product.getDescription(),
                 product.getStatus(), product.getStock(), product.getCreatedAt(),
                 product.getUpdatedAt());
+    }
+
+    public PageResponse<ProductResponse> searchProductByName(String keyword, int page, int size,
+            ProductSortBy productSortBy, SortDirection sortDirection) {
+
+
+        return null;
     }
 }
