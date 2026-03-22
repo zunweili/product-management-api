@@ -70,8 +70,6 @@ public class ProductService {
                 product.getUpdatedAt());
     }
 
-
-
     public PageResponse<ProductResponse> searchActiveProducts(String keyword, int page, int size,
             ProductSortBy productSortBy, SortDirection sortDirection) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection.name()),
@@ -101,7 +99,33 @@ public class ProductService {
                 productPage.isLast());
     }
 
+    public PageResponse<ProductResponse> searchProducts(String keyword, int page, int size,
+            ProductSortBy productSortBy, Sort.Direction sortDirection, ProductStatus status) {
+        Sort sort = Sort.by(sortDirection, productSortBy.getFieldName());
 
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Product> productPage;
+
+        if (keyword == null || keyword.isBlank()) {
+            productPage = productRepository.findByStatus(status, pageable);
+        } else {
+            productPage = productRepository.findByStatusAndProductNameContainingIgnoreCase(status,
+                    keyword.trim(), pageable);
+        }
+
+        List<ProductResponse> content = productPage.getContent().stream()
+                .map((Product product) -> new ProductResponse(product.getProductId(),
+                        product.getProductName(), product.getCategory().getCategoryId(),
+                        product.getCategory().getCategoryName(), product.getPrice(),
+                        product.getImageUrl(), product.getDescription(), product.getStatus(),
+                        product.getStock(), product.getCreatedAt(), product.getUpdatedAt()))
+                .toList();
+
+        return new PageResponse<>(content, productPage.getNumber(), productPage.getSize(),
+                productPage.getTotalElements(), productPage.getTotalPages(), productPage.isFirst(),
+                productPage.isLast());
+    }
 
     public UpdateProductResponse updateProduct(Long productId,
             UpdateProductRequest updateProductRequest) {
