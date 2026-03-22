@@ -70,6 +70,8 @@ public class ProductService {
                 product.getUpdatedAt());
     }
 
+
+
     public PageResponse<ProductResponse> searchProducts(String keyword, int page, int size,
             ProductSortBy productSortBy, SortDirection sortDirection) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection.name()),
@@ -80,10 +82,10 @@ public class ProductService {
         Page<Product> productPage;
 
         if (keyword == null || keyword.isBlank()) {
-            productPage = productRepository.findAll(pageable);
+            productPage = productRepository.findByStatus(ProductStatus.ACTIVE, pageable);
         } else {
-            productPage = productRepository.findByProductNameContainingIgnoreCase(keyword.trim(),
-                    pageable);
+            productPage = productRepository.findByStatusAndProductNameContainingIgnoreCase(
+                    ProductStatus.ACTIVE, keyword.trim(), pageable);
         }
 
         List<ProductResponse> content = productPage.getContent().stream()
@@ -98,6 +100,8 @@ public class ProductService {
                 productPage.getTotalElements(), productPage.getTotalPages(), productPage.isFirst(),
                 productPage.isLast());
     }
+
+
 
     public UpdateProductResponse updateProduct(Long productId,
             UpdateProductRequest updateProductRequest) {
