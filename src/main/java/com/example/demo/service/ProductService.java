@@ -7,9 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.request.CreateProductRequest;
+import com.example.demo.dto.request.UpdateProductRequest;
 import com.example.demo.dto.response.CreateProductResponse;
 import com.example.demo.dto.response.PageResponse;
 import com.example.demo.dto.response.ProductResponse;
+import com.example.demo.dto.response.UpdateProductResponse;
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Product;
 import com.example.demo.enums.ProductSortBy;
@@ -95,5 +97,33 @@ public class ProductService {
         return new PageResponse<>(content, productPage.getNumber(), productPage.getSize(),
                 productPage.getTotalElements(), productPage.getTotalPages(), productPage.isFirst(),
                 productPage.isLast());
+    }
+
+    public UpdateProductResponse updateProduct(Long productId,
+            UpdateProductRequest updateProductRequest) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("找不到此商品"));
+
+        Category category = categoryRepository.findById(updateProductRequest.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("查無此商品類別"));
+
+        product.setProductName(updateProductRequest.getProductName().trim());
+        product.setCategory(category);
+        product.setPrice(updateProductRequest.getPrice());
+
+        String imageUrl = updateProductRequest.getImageUrl();
+        product.setImageUrl(imageUrl == null || imageUrl.isBlank() ? null : imageUrl.trim());
+
+        String description = updateProductRequest.getDescription();
+        product.setDescription(
+                description == null || description.isBlank() ? null : description.trim());
+
+        Product savedProduct = productRepository.save(product);
+
+        return new UpdateProductResponse(savedProduct.getProductId(), savedProduct.getProductName(),
+                savedProduct.getCategory().getCategoryId(),
+                savedProduct.getCategory().getCategoryName(), savedProduct.getPrice(),
+                savedProduct.getImageUrl(), savedProduct.getDescription(), savedProduct.getStatus(),
+                savedProduct.getStock(), savedProduct.getUpdatedAt());
     }
 }

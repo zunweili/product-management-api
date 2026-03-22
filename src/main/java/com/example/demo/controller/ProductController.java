@@ -6,14 +6,17 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.request.CreateProductRequest;
+import com.example.demo.dto.request.UpdateProductRequest;
 import com.example.demo.dto.response.CreateProductResponse;
 import com.example.demo.dto.response.PageResponse;
 import com.example.demo.dto.response.ProductResponse;
+import com.example.demo.dto.response.UpdateProductResponse;
 import com.example.demo.enums.ProductSortBy;
 import com.example.demo.enums.SortDirection;
 import com.example.demo.service.ProductService;
@@ -52,5 +55,14 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.OK).body(
                 productService.searchProducts(keyword, page, size, productSortBy, sortDirection));
+    }
+
+    @PutMapping("/products/{productId}")
+    public ResponseEntity<UpdateProductResponse> updateProduct(
+            @PathVariable @Min(value = 1, message = "productId 必須大於或等於 1") Long productId,
+            @RequestBody @Valid UpdateProductRequest updateProductRequest) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(productService.updateProduct(productId, updateProductRequest));
     }
 }
