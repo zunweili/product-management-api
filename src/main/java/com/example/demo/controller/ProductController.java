@@ -46,15 +46,15 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<PageResponse<ProductResponse>> searchProducts(
+    public ResponseEntity<PageResponse<ProductResponse>> searchActiveProducts(
             @RequestParam(required = false) String keyword,
             @RequestParam(defaultValue = "0") @Min(value = 0, message = "起始頁碼必須大於或等於 0") int page,
             @RequestParam(defaultValue = "10") @Min(value = 1, message = "每頁筆數必須大於或等於 1") int size,
             @RequestParam(defaultValue = "CREATED_AT") ProductSortBy productSortBy,
             @RequestParam(defaultValue = "DESC") SortDirection sortDirection) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(
-                productService.searchProducts(keyword, page, size, productSortBy, sortDirection));
+        return ResponseEntity.status(HttpStatus.OK).body(productService
+                .searchActiveProducts(keyword, page, size, productSortBy, sortDirection));
     }
 
     @PutMapping("/products/{productId}")

@@ -72,7 +72,7 @@ public class ProductService {
 
 
 
-    public PageResponse<ProductResponse> searchProducts(String keyword, int page, int size,
+    public PageResponse<ProductResponse> searchActiveProducts(String keyword, int page, int size,
             ProductSortBy productSortBy, SortDirection sortDirection) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection.name()),
                 productSortBy.getFieldName());
