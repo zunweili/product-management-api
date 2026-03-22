@@ -1,5 +1,10 @@
 package com.example.demo.service;
 
+import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.request.CreateProductRequest;
 import com.example.demo.dto.response.CreateProductResponse;
@@ -63,10 +68,32 @@ public class ProductService {
                 product.getUpdatedAt());
     }
 
-    public PageResponse<ProductResponse> searchProductByName(String keyword, int page, int size,
+    public PageResponse<ProductResponse> searchProducts(String keyword, int page, int size,
             ProductSortBy productSortBy, SortDirection sortDirection) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection.name()),
+                productSortBy.getFieldName());
 
+        Pageable pageable = PageRequest.of(page, size, sort);
 
-        return null;
+        Page<Product> productPage;
+
+        if (keyword == null || keyword.isBlank()) {
+            productPage = productRepository.findAll(pageable);
+        } else {
+            productPage = productRepository.findByProductNameContainingIgnoreCase(keyword.trim(),
+                    pageable);
+        }
+
+        List<ProductResponse> content = productPage.getContent().stream()
+                .map((Product product) -> new ProductResponse(product.getProductId(),
+                        product.getProductName(), product.getCategory().getCategoryId(),
+                        product.getCategory().getCategoryName(), product.getPrice(),
+                        product.getImageUrl(), product.getDescription(), product.getStatus(),
+                        product.getStock(), product.getCreatedAt(), product.getUpdatedAt()))
+                .toList();
+
+        return new PageResponse<>(content, productPage.getNumber(), productPage.getSize(),
+                productPage.getTotalElements(), productPage.getTotalPages(), productPage.isFirst(),
+                productPage.isLast());
     }
 }
