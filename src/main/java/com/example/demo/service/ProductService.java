@@ -82,8 +82,7 @@ public class ProductService {
 
     public PageResponse<ProductResponse> searchActiveProducts(String keyword, int page, int size,
             ProductSortBy productSortBy, Sort.Direction sortDirection) {
-        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection.name()),
-                productSortBy.getFieldName());
+        Sort sort = Sort.by(sortDirection, productSortBy.getFieldName());
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
