@@ -11,8 +11,6 @@ import com.example.demo.enums.ProductStatus;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findByProductIdAndStatus(Long productId, ProductStatus status);
 
-    Page<Product> findByProductNameContainingIgnoreCase(String keyword, Pageable pageable);
-
     Page<Product> findByStatus(ProductStatus status, Pageable pageable);
 
     Page<Product> findByStatusAndProductNameContainingIgnoreCase(ProductStatus status,
