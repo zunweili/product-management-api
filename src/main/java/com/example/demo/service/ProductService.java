@@ -8,10 +8,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.request.CreateProductRequest;
 import com.example.demo.dto.request.UpdateProductRequest;
+import com.example.demo.dto.request.UpdateProductStockRequest;
 import com.example.demo.dto.response.CreateProductResponse;
 import com.example.demo.dto.response.PageResponse;
 import com.example.demo.dto.response.ProductResponse;
 import com.example.demo.dto.response.UpdateProductResponse;
+import com.example.demo.dto.response.UpdateProductStockResponse;
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Product;
 import com.example.demo.enums.ProductSortBy;
@@ -139,7 +141,7 @@ public class ProductService {
     public UpdateProductResponse updateProduct(Long productId,
             UpdateProductRequest updateProductRequest) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("找不到此商品"));
+                .orElseThrow(() -> new ResourceNotFoundException("查無此商品"));
 
         Category category = categoryRepository.findById(updateProductRequest.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("查無此商品類別"));
@@ -162,5 +164,18 @@ public class ProductService {
                 savedProduct.getCategory().getCategoryName(), savedProduct.getPrice(),
                 savedProduct.getImageUrl(), savedProduct.getDescription(), savedProduct.getStatus(),
                 savedProduct.getStock(), savedProduct.getUpdatedAt());
+    }
+
+    public UpdateProductStockResponse updateProductStock(Long productId,
+            UpdateProductStockRequest updateProductStockRequest) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("查無此商品"));
+
+        product.setStock(updateProductStockRequest.getStock());
+
+        Product savedProduct = productRepository.save(product);
+
+        return new UpdateProductStockResponse(savedProduct.getProductId(),
+                savedProduct.getProductName(), savedProduct.getStock());
     }
 }

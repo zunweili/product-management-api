@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.request.CreateProductRequest;
 import com.example.demo.dto.request.UpdateProductRequest;
+import com.example.demo.dto.request.UpdateProductStockRequest;
 import com.example.demo.dto.response.CreateProductResponse;
 import com.example.demo.dto.response.PageResponse;
 import com.example.demo.dto.response.ProductResponse;
 import com.example.demo.dto.response.UpdateProductResponse;
+import com.example.demo.dto.response.UpdateProductStockResponse;
 import com.example.demo.enums.ProductSortBy;
 import com.example.demo.enums.ProductStatus;
 import com.example.demo.service.ProductService;
@@ -86,5 +89,12 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(productService.updateProduct(productId, updateProductRequest));
     }
+
+    @PatchMapping("/admin/products/{productId}/stock")
+    public ResponseEntity<UpdateProductStockResponse> updateProductStock(
+            @PathVariable @Min(value = 1, message = "productId 必須大於或等於 1") Long productId,
+            @RequestBody @Valid UpdateProductStockRequest updateProductStockRequest) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(productService.updateProductStock(productId, updateProductStockRequest));
+    }
 }
-// to-do: admin 刪除Enum 改用到enum的地方 決定依id查詢邏輯
