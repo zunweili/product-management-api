@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.request.CreateProductRequest;
 import com.example.demo.dto.request.UpdateProductRequest;
@@ -17,7 +16,6 @@ import com.example.demo.entity.Category;
 import com.example.demo.entity.Product;
 import com.example.demo.enums.ProductSortBy;
 import com.example.demo.enums.ProductStatus;
-import com.example.demo.enums.SortDirection;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.ProductRepository;
@@ -83,7 +81,7 @@ public class ProductService {
     }
 
     public PageResponse<ProductResponse> searchActiveProducts(String keyword, int page, int size,
-            ProductSortBy productSortBy, SortDirection sortDirection) {
+            ProductSortBy productSortBy, Sort.Direction sortDirection) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection.name()),
                 productSortBy.getFieldName());
 

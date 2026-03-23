@@ -20,7 +20,6 @@ import com.example.demo.dto.response.ProductResponse;
 import com.example.demo.dto.response.UpdateProductResponse;
 import com.example.demo.enums.ProductSortBy;
 import com.example.demo.enums.ProductStatus;
-import com.example.demo.enums.SortDirection;
 import com.example.demo.service.ProductService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -61,7 +60,7 @@ public class ProductController {
             @RequestParam(defaultValue = "0") @Min(value = 0, message = "起始頁碼必須大於或等於 0") int page,
             @RequestParam(defaultValue = "10") @Min(value = 1, message = "每頁筆數必須大於或等於 1") int size,
             @RequestParam(defaultValue = "CREATED_AT") ProductSortBy productSortBy,
-            @RequestParam(defaultValue = "DESC") SortDirection sortDirection) {
+            @RequestParam(defaultValue = "DESC") Sort.Direction sortDirection) {
 
         return ResponseEntity.status(HttpStatus.OK).body(productService
                 .searchActiveProducts(keyword, page, size, productSortBy, sortDirection));
