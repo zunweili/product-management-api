@@ -31,7 +31,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @PostMapping("/categories")
+    @PostMapping("/admin/categories")
     public ResponseEntity<CreateCategoryResponse> createCategory(
             @RequestBody @Valid CreateCategoryRequest categoryRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -53,14 +53,14 @@ public class CategoryController {
                 .body(categoryService.searchCategoriesByName(keyword, page, size));
     }
 
-    @PutMapping("/categories/{categoryId}")
+    @PutMapping("/admin/categories/{categoryId}")
     public ResponseEntity<UpdateCategoryResponse> updateCategory(@PathVariable Long categoryId,
             @RequestBody @Valid UpdateCategoryRequest updateCategoryRequest) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(categoryService.updateCategory(categoryId, updateCategoryRequest));
     }
 
-    @DeleteMapping("/categories/{categoryId}")
+    @DeleteMapping("/admin/categories/{categoryId}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {
         categoryService.deleteCategory(categoryId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
