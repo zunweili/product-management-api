@@ -34,14 +34,14 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @PostMapping("/products")
+    @PostMapping("/admin/products")
     public ResponseEntity<CreateProductResponse> createProduct(
             @RequestBody @Valid CreateProductRequest createProductRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(productService.createProduct(createProductRequest));
     }
 
-    @GetMapping("/products/{productId}")
+    @GetMapping("/admin/products/{productId}")
     public ResponseEntity<ProductResponse> getProductById(
             @PathVariable @Min(value = 1, message = "productId 必須大於或等於 1") Long productId) {
         return ResponseEntity.status(HttpStatus.OK).body(productService.getProductById(productId));
@@ -71,7 +71,7 @@ public class ProductController {
                 page, size, productSortBy, sortDirection, status));
     }
 
-    @PutMapping("/products/{productId}")
+    @PutMapping("/admin/products/{productId}")
     public ResponseEntity<UpdateProductResponse> updateProduct(
             @PathVariable @Min(value = 1, message = "productId 必須大於或等於 1") Long productId,
             @RequestBody @Valid UpdateProductRequest updateProductRequest) {
@@ -80,3 +80,4 @@ public class ProductController {
                 .body(productService.updateProduct(productId, updateProductRequest));
     }
 }
+// to-do: admin 刪除Enum 改用到enum的地方 決定依id查詢邏輯
