@@ -8,11 +8,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.request.CreateProductRequest;
 import com.example.demo.dto.request.UpdateProductRequest;
+import com.example.demo.dto.request.UpdateProductStatusRequest;
 import com.example.demo.dto.request.UpdateProductStockRequest;
 import com.example.demo.dto.response.CreateProductResponse;
 import com.example.demo.dto.response.PageResponse;
 import com.example.demo.dto.response.ProductResponse;
 import com.example.demo.dto.response.UpdateProductResponse;
+import com.example.demo.dto.response.UpdateProductStatusResponse;
 import com.example.demo.dto.response.UpdateProductStockResponse;
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Product;
@@ -177,5 +179,18 @@ public class ProductService {
 
         return new UpdateProductStockResponse(savedProduct.getProductId(),
                 savedProduct.getProductName(), savedProduct.getStock());
+    }
+
+    public UpdateProductStatusResponse updateProductStatus(Long productId,
+            UpdateProductStatusRequest updateProductStatusRequest) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("查無此商品"));
+
+        product.setStatus(updateProductStatusRequest.getStatus());
+
+        Product savedProduct = productRepository.save(product);
+
+        return new UpdateProductStatusResponse(savedProduct.getProductId(),
+                savedProduct.getProductName(), savedProduct.getStatus());
     }
 }

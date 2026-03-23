@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.request.CreateProductRequest;
 import com.example.demo.dto.request.UpdateProductRequest;
+import com.example.demo.dto.request.UpdateProductStatusRequest;
 import com.example.demo.dto.request.UpdateProductStockRequest;
 import com.example.demo.dto.response.CreateProductResponse;
 import com.example.demo.dto.response.PageResponse;
 import com.example.demo.dto.response.ProductResponse;
 import com.example.demo.dto.response.UpdateProductResponse;
+import com.example.demo.dto.response.UpdateProductStatusResponse;
 import com.example.demo.dto.response.UpdateProductStockResponse;
 import com.example.demo.enums.ProductSortBy;
 import com.example.demo.enums.ProductStatus;
@@ -96,5 +98,13 @@ public class ProductController {
             @RequestBody @Valid UpdateProductStockRequest updateProductStockRequest) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(productService.updateProductStock(productId, updateProductStockRequest));
+    }
+
+    @PatchMapping("/admin/products/{productId}/status")
+    public ResponseEntity<UpdateProductStatusResponse> updateProductStatus(
+            @PathVariable @Min(value = 1, message = "productId 必須大於或等於 1") Long productId,
+            @RequestBody @Valid UpdateProductStatusRequest updateProductStatusRequest) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(productService.updateProductStatus(productId, updateProductStatusRequest));
     }
 }
