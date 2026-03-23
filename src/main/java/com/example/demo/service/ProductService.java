@@ -193,4 +193,11 @@ public class ProductService {
         return new UpdateProductStatusResponse(savedProduct.getProductId(),
                 savedProduct.getProductName(), savedProduct.getStatus());
     }
+
+    public void deleteProduct(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("查無此商品"));
+
+        productRepository.delete(product);
+    }
 }
