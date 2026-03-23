@@ -41,6 +41,14 @@ public class ProductController {
                 .body(productService.createProduct(createProductRequest));
     }
 
+    @GetMapping("/products/{productId}")
+    public ResponseEntity<ProductResponse> getActiveProductById(
+            @PathVariable @Min(value = 1, message = "productId 必須大於或等於 1") Long productId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(productService.getActiveProductById(productId));
+    }
+
+
     @GetMapping("/admin/products/{productId}")
     public ResponseEntity<ProductResponse> getProductById(
             @PathVariable @Min(value = 1, message = "productId 必須大於或等於 1") Long productId) {

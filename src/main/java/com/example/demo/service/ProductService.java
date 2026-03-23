@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.request.CreateProductRequest;
 import com.example.demo.dto.request.UpdateProductRequest;
@@ -57,6 +58,17 @@ public class ProductService {
                 savedProduct.getCategory().getCategoryName(), savedProduct.getPrice(),
                 savedProduct.getImageUrl(), savedProduct.getDescription(), savedProduct.getStatus(),
                 savedProduct.getStock(), savedProduct.getCreatedAt());
+    }
+
+    public ProductResponse getActiveProductById(Long productId) {
+        Product product =
+                productRepository.findByProductIdAndStatus(productId, ProductStatus.ACTIVE)
+                        .orElseThrow(() -> new ResourceNotFoundException("查無此商品"));
+        return new ProductResponse(product.getProductId(), product.getProductName(),
+                product.getCategory().getCategoryId(), product.getCategory().getCategoryName(),
+                product.getPrice(), product.getImageUrl(), product.getDescription(),
+                product.getStatus(), product.getStock(), product.getCreatedAt(),
+                product.getUpdatedAt());
     }
 
     public ProductResponse getProductById(Long productId) {
