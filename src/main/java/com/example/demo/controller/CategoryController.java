@@ -31,7 +31,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @PostMapping("/categories")
+    @PostMapping("/admin/categories")
     public ResponseEntity<CreateCategoryResponse> createCategory(
             @RequestBody @Valid CreateCategoryRequest categoryRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -54,7 +54,7 @@ public class CategoryController {
                 .body(categoryService.searchCategories(keyword, page, size));
     }
 
-    @PutMapping("/categories/{categoryId}")
+    @PutMapping("/admin/categories/{categoryId}")
     public ResponseEntity<UpdateCategoryResponse> updateCategory(
             @PathVariable @Min(value = 1, message = "categoryId 必須大於或等於 1") Long categoryId,
             @RequestBody @Valid UpdateCategoryRequest updateCategoryRequest) {
@@ -62,10 +62,13 @@ public class CategoryController {
                 .body(categoryService.updateCategory(categoryId, updateCategoryRequest));
     }
 
-    @DeleteMapping("/categories/{categoryId}")
+    @DeleteMapping("/admin/categories/{categoryId}")
     public ResponseEntity<Void> deleteCategory(
             @PathVariable @Min(value = 1, message = "categoryId 必須大於或等於 1") Long categoryId) {
         categoryService.deleteCategory(categoryId);
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
+
+
