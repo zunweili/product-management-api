@@ -39,8 +39,7 @@ public class CategoryController {
     }
 
     @GetMapping("/categories/{categoryId}")
-    public ResponseEntity<CategoryResponse> getCategoryById(
-            @PathVariable @Min(value = 1, message = "categoryId 必須大於或等於 1") Long categoryId) {
+    public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable Long categoryId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(categoryService.getCategoryById(categoryId));
     }
@@ -55,20 +54,15 @@ public class CategoryController {
     }
 
     @PutMapping("/admin/categories/{categoryId}")
-    public ResponseEntity<UpdateCategoryResponse> updateCategory(
-            @PathVariable @Min(value = 1, message = "categoryId 必須大於或等於 1") Long categoryId,
+    public ResponseEntity<UpdateCategoryResponse> updateCategory(@PathVariable Long categoryId,
             @RequestBody @Valid UpdateCategoryRequest updateCategoryRequest) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(categoryService.updateCategory(categoryId, updateCategoryRequest));
     }
 
     @DeleteMapping("/admin/categories/{categoryId}")
-    public ResponseEntity<Void> deleteCategory(
-            @PathVariable @Min(value = 1, message = "categoryId 必須大於或等於 1") Long categoryId) {
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {
         categoryService.deleteCategory(categoryId);
-
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
-
-
