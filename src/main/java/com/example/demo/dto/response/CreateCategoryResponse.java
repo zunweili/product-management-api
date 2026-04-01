@@ -1,8 +1,14 @@
 package com.example.demo.dto.response;
 
 import java.time.OffsetDateTime;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-public record CreateCategoryResponse(Long categoryId, String categoryName,
-                OffsetDateTime createdAt) {
+public record CreateCategoryResponse(
+        @Schema(description = "商品類別 ID", example = "16") Long categoryId,
+
+        @Schema(description = "商品類別名稱", example = "青少年文學") String categoryName,
+
+        @Schema(description = "建立時間 (ISO 8601 格式)",
+                example = "2026-03-09T16:53:55+08:00") OffsetDateTime createdAt) {
 
 }
