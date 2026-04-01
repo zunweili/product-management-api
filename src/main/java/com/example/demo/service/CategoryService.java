@@ -16,6 +16,7 @@ import com.example.demo.entity.Category;
 import com.example.demo.exception.DuplicateResourceException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.CategoryRepository;
+import com.example.demo.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
 
     public CreateCategoryResponse createCategory(CreateCategoryRequest createCategoryRequest) {
         String categoryName = createCategoryRequest.getCategoryName().trim();
@@ -94,6 +96,10 @@ public class CategoryService {
     public void deleteCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("找不到此商品類別"));
+
+        if (productRepository.existsByCategory_CategoryId(categoryId)) {
+            throw new DuplicateResourceException("此商品類別正在被商品使用，無法刪除");
+        }
 
         categoryRepository.delete(category);
     }
