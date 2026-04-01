@@ -38,7 +38,7 @@
 - Swagger / OpenAPI
 - Lombok
 
-## Project Structure
+## `Project Structure`
 
 ```
 src/  
