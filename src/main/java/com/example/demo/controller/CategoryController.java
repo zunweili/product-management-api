@@ -168,7 +168,7 @@ public class CategoryController {
     )
     // @formatter:on
     @GetMapping("/categories")
-    public ResponseEntity<PageResponse<CategoryResponse>> searchCategoriesByName(
+    public ResponseEntity<PageResponse<CategoryResponse>> searchCategories(
             @Parameter(description = "關鍵字",
                     example = "小說") @RequestParam(required = false) String keyword,
             @Parameter(description = "頁碼，從 0 開始", example = "0") @RequestParam(
